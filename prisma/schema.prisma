@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL
+  WON
+  LOST
+}
+
+enum EmailType {
+  COLD
+  FOLLOW_UP
+  RE_ENGAGEMENT
+  CUSTOM
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String?
+  email        String   @unique
+  passwordHash String
+  company      String?
+  groqApiKey   String?
+  resendApiKey String?
+  emailFrom    String?
+  leads        Lead[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Lead {
+  id        String     @id @default(cuid())
+  name      String
+  email     String
+  company   String?
+  status    LeadStatus @default(NEW)
+  notes     Note[]
+  emails    EmailLog[]
+  tags      String[]   @default([])
+  summary   String?
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@index([userId, status])
+  @@index([email])
+}
+
+model Note {
+  id          String   @id @default(cuid())
+  content     String
+  aiSummary   Json?
+  leadId      String
+  lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model EmailLog {
+  id        String    @id @default(cuid())
+  to        String
+  subject   String
+  body      String
+  type      EmailType @default(CUSTOM)
+  sent      Boolean   @default(false)
+  error     String?
+  leadId    String
+  lead      Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+}
