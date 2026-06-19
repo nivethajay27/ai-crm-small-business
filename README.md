@@ -11,3 +11,26 @@ A full-stack SaaS CRM built with Next.js App Router, TypeScript, Tailwind, Prism
 5. Start dev server: `npm run dev`
 
 Groq and Resend keys can be set globally in `.env` or per user from the Settings page.
+
+## Screenshots
+
+### Dashboard
+![Dashboard](docs/screenshots/dashboard.png)
+
+### Leads
+![Leads](docs/screenshots/leads.png)
+
+### Lead Detail
+![Lead Detail](docs/screenshots/lead-detail.png)
+
+### Pipeline
+![Pipeline](docs/screenshots/pipeline.png)
+
+### Settings
+![Settings](docs/screenshots/settings.png)
+
+### Login
+![Login](docs/screenshots/login.png)
+
+### Register
+![Register](docs/screenshots/register.png)
